@@ -18,16 +18,64 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  /* background-image: url('../public/images/single_dagger_rose_transparent.png'); */
+  /* background-color: #16252d; */
+  background-color: rgb(32, 32, 32);
+  background-size: 5%;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+.container {
+  display: grid;
+  margin: 0 auto;
+  padding-top: 190px;
+  column-gap: 30px;
+  grid-template-columns: 8fr 4fr;
+  margin-top: -10rem;
+}
+
+.container > .item3,
+.item2 {
+  border-left: 1px solid grey;
+}
+
+.item1 {
+  /*   grid-column: 1 / 2; */
+  grid-row: 1 / 4; /* Span all three rows */
+}
+
+.item2 {
+  grid-column: 2 / 3;
+}
+
+.item3 {
+  grid-column: 2 / 3;
+}
+
+.loading {
+  /* border: 1px solid red; */
+  animation: invert-revert 2s linear infinite;
+}
+
+.loading div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes invert-revert {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(0deg);
   }
 }
