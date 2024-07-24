@@ -171,10 +171,10 @@ export const resolvers = {
 
   Mutation: {
     authenticateSpotify: async (_, { code }, { res }) => {
-      console.log(code, '<--MUTATION-CODE')
+      // console.log(code, '<--MUTATION-CODE')
       const tokenData = await exchangeSpotifyCode(code)
 
-      console.log(tokenData, '<--TOKEN DATA')
+      // console.log(tokenData, '<--TOKEN DATA')
 
       return tokenData
     },

@@ -16,7 +16,6 @@ export default function Music() {
   const router = useRouter()
   const [authToken, setAuthToken] = useState('')
   const [selectedAlbum, setSelectedAlbum] = useState(null)
-  const [genres, setGenres] = useState([])
   const [topTrackNote, setTopTrackNote] = useState(null)
 
   useEffect(() => {
@@ -25,7 +24,7 @@ export default function Music() {
         const tokenData = await getAccesstokenFromURL()
         if (tokenData && tokenData.access_token) {
           setAuthToken(tokenData.access_token)
-          router.replace('/music', undefined, { shallow: true })
+          router.replace('/music')
         } else {
           throw new Error('Failed to get access token')
         }
@@ -44,7 +43,6 @@ export default function Music() {
       </div>
     )
   }
-  // console.log('topTrackNote--===>', topTrackNote)
   return (
     <ApolloWrapper authToken={authToken}>
       <div className='flex '>
@@ -61,11 +59,8 @@ export default function Music() {
         <div className='item1'>
           <Tracks
             setSelectedAlbum={setSelectedAlbum}
-            setGenres={setGenres}
             setTopTrackNote={setTopTrackNote}
           />
-
-          <Comments />
         </div>
 
         <div className='item3'>

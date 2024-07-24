@@ -4,10 +4,8 @@ import Link from 'next/link'
 import TopItem from '../topItem/TopItem'
 import RecentlyAddedTracks from './RecentelyAddedTracks'
 import FilterButton from '../FilterButton'
-
 import Loading from '../loading/Loading'
-
-// fix rate limit problem
+import { ItemType, TrackProps, track } from './Track.types'
 
 const GET_USER_TRACKS = gql`
   query userSavedTracks($limit: Int, $offset: Int) {
@@ -45,7 +43,10 @@ const GET_USER_TRACKS = gql`
   }
 `
 
-export default function Tracks({ setSelectedAlbum, setTopTrackNote }) {
+export default function Tracks({
+  setSelectedAlbum,
+  setTopTrackNote,
+}: TrackProps) {
   // switch to useSuspense later
   const [selectedItem, setSelectedItem] = useState('likedTracks')
 
@@ -57,13 +58,13 @@ export default function Tracks({ setSelectedAlbum, setTopTrackNote }) {
   })
 
   const handleAlbumClick = useCallback(
-    (track) => {
+    (track: track) => {
       setSelectedAlbum(track)
     },
     [setSelectedAlbum]
   )
 
-  const handleTopItem = useCallback((type) => {
+  const handleTopItem = useCallback((type: ItemType) => {
     setSelectedItem(type)
     setSelectedAlbum(null)
   }, [])
@@ -91,7 +92,7 @@ export default function Tracks({ setSelectedAlbum, setTopTrackNote }) {
       </div>
 
       <ul className='grid grid-cols-2 gap-3 text-center lg:grid-cols-4 md:grid-cols-3'>
-        {data.userSavedTracks.items.map((track) => {
+        {data.userSavedTracks.items.map((track: track) => {
           return (
             <li key={track.track.id}>
               {selectedItem === 'likedTracks' && (
