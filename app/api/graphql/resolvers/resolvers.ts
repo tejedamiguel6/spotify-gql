@@ -1,6 +1,12 @@
 import { exchangeSpotifyCode } from '../../../auth/auth'
 // import { getAccesstokenFromURL } from '../../../auth/spotify-auth'
 
+import { fetchGraphQL } from '@/app/lib/contentfulAPI'
+import {
+  getAllContentfulComments,
+  getComment,
+} from '@/app/lib/contentful-api/queries/getComments'
+
 export const resolvers = {
   Query: {
     profile: async (parent, _args, { dataSources }) => {
@@ -76,6 +82,64 @@ export const resolvers = {
 
       return data
     },
+
+    // CONTENTFUL RESOLVER
+    commentCollection: async (_, __, { dataSources }, info) => {
+      // console.log('COMMENT COLLECTION RESOLVER', dataSources)
+      const comments = await fetchGraphQL({
+        query: getAllContentfulComments,
+      })
+
+      // console.log(comments.data.commentCollection.items, '<--COMMENTS')
+      return comments.data.commentCollection.items
+    },
+    singleComment: async (_, { id }, { dataSources }, info) => {
+      const singleComment = await fetchGraphQL({
+        query: getComment(id),
+      })
+      return singleComment.data.comment
+    },
+
+    getCommentsWithTracks: async (_, { id }, { dataSources }, info) => {
+      const fetchComments = await fetchGraphQL({
+        query: getAllContentfulComments,
+      })
+
+      const comments = fetchComments.data.commentCollection.items
+
+      // console.log(comments, '<--FETCHED COMMENTS')
+
+      // if the trackID matches the getCommentsWithTracks(id) then return me the body of the comment
+      // Filter comments that match the given trackId
+      const matchedComments = comments.filter(
+        (comment: any) => comment.trackId === id
+      )
+
+      // todo: match the system ID with the comment that
+      // has the same trackId as the id passed in the query
+
+      // Extract the body of the matched comments
+      const matchedCommentsBodies = matchedComments.map(
+        (comment: any) => comment.body.json.content[0].content[0].value
+      )
+
+      // matching the titles
+      const matchedTitles = matchedComments.map((comment: any) => comment.title)
+
+      // Return the trackId and the matched comments
+      return {
+        trackId: id,
+        comments: {
+          sys: {
+            // todo: get system id from comment
+            id: id,
+          },
+          title: matchedTitles,
+          trackId: id,
+          body: matchedCommentsBodies,
+        },
+      }
+    },
   },
 
   CurrentlyPlayingTrack: {
@@ -87,7 +151,6 @@ export const resolvers = {
 
   Genres: {
     tracks: async (parent, _, { dataSources }) => {
-      console.log(parent, '<---PARENT')
       const data = await dataSources.spotifyAPI.getUserTopArtists(parent.id)
       return data.genres
     },
@@ -114,6 +177,31 @@ export const resolvers = {
       console.log(tokenData, '<--TOKEN DATA')
 
       return tokenData
+    },
+
+    createComment: async (_, { userId, trackId, body }) => {
+      const response = await fetchGraphQL({
+        query: `query createComment($userId: String!, $trackId: String!, $body: String!) {
+          createComment(data: {
+            userId: $userId
+            trackId: $trackId
+            body: $body
+          }) {
+            userId
+            trackId
+            body {
+              json
+            }
+          }
+        }`,
+        variables: {
+          userId,
+          trackId,
+          body,
+        },
+      })
+
+      return response.data.createComment
     },
   },
 }

@@ -15,6 +15,7 @@
     "@apollo/server": "^4.10.4",
     "@as-integrations/next": "^3.0.0",
     "clsx": "^2.1.1",
+    "contentful": "^10.12.8",
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "graphql-tag": "^2.12.6",

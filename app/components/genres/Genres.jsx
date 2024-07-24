@@ -19,7 +19,7 @@ const GET_USER_GENRES = gql`
 `
 
 export default function Genres() {
-  const [displayCount, setDisplayCount] = useState(15)
+  const [displayCount, setDisplayCount] = useState(25)
   const { data, error, loading, fetchMore } = useQuery(GET_USER_GENRES, {
     variables: {
       offset: 0,
@@ -48,22 +48,20 @@ export default function Genres() {
   return (
     <div className=''>
       <p>Your Top Genres</p>
-      <div className='flex items-center border-2 w-[60%]'>
-        <div className='flex w-full overflow-x-auto '>
+      <div className='flex items-center border-2'>
+        <div className='flex w-full overflow-x-auto space-x-2'>
           {showGenres?.map((genre, index) => (
             <div key={index} className='px-2 py-1 m-1 bg-gray-600 rounded-md '>
               <p className='text-white-600'>{genre}</p>
             </div>
           ))}
         </div>
-
-        <div>
-          <div className='flex p-4 '>
-            <div className='ml-4 '>
-              <button onClick={handleMore}>Next</button>
-            </div>
-          </div>
-        </div>
+        {/* <button
+          className='ml-4 p-2 bg-blue-500 text-white rounded-md'
+          onClick={handleMore}
+        >
+          Next
+        </button> */}
       </div>
     </div>
   )

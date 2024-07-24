@@ -61,33 +61,30 @@ export default function CurrentTrack() {
   const isPlaying = data?.currentlyPlayingTrack?.is_playing
 
   return (
-    <div className='border-2'>
-      <div className='flex p-2 '>
-        <div className='pr-6 text-sm'>
-          <h1>⚡️Currenly Spining:⚡️ </h1>
-          <h1 className='mr-4'>
-            Artist: {data?.currentlyPlayingTrack?.item?.artists[0].name}
-          </h1>
-          <p>Track Name: {data?.currentlyPlayingTrack?.item?.name}</p>
-          <p>
-            Listening on: {data?.currentlyPlayingTrack?.device[0]?.type}
-            <span> || "{data?.currentlyPlayingTrack?.device[0]?.name}"</span>
-          </p>
-        </div>
-
-        <div
-          className={
-            isPlaying &&
-            'flex flex-col w-20 h-20 mx-auto animate-spin-slow rounded-[50%] outline-dotted outline-2 outline-gray-500'
-          }
-        >
-          <Image
-            className='rounded-full '
-            src={getImage}
-            width={80}
-            height={80}
-          />
-        </div>
+    <div className='flex p-2 pr-16'>
+      <div className='pr-6 text-sm '>
+        <h1>⚡️Currently Spinning:⚡️ </h1>
+        <h1 className='mr-4'>
+          Artist: {data?.currentlyPlayingTrack?.item?.artists[0].name}
+        </h1>
+        <p>Track Name: {data?.currentlyPlayingTrack?.item?.name}</p>
+        <p>
+          Listening on: {data?.currentlyPlayingTrack?.device[0]?.type}
+          <span> || "{data?.currentlyPlayingTrack?.device[0]?.name}"</span>
+        </p>
+      </div>
+      <div
+        className={
+          isPlaying &&
+          'flex flex-col w-20 h-20 mx-auto animate-spin-slow rounded-[50%] outline-dotted outline-2 outline-gray-500'
+        }
+      >
+        <Image
+          className='rounded-full '
+          src={getImage}
+          width={80}
+          height={80}
+        />
       </div>
     </div>
   )

@@ -15,11 +15,28 @@ export const typeDefs = gql`
   type Query {
     profile: Profile
     userSavedTracks(limit: Int, offset: Int): Tracks @cacheControl(maxAge: 60)
-    topItems(TopArtistTopTrack: String): TopItem
+    topItems(TopArtistTopTrack: String, id: String): TopItem
     currentlyPlayingTrack: CurrentlyPlayingTrack
     artist(id: ID!): Artist
     genres: Genres @cacheControl(maxAge: 60)
     user: User
+    # contentful api below
+    commentCollection: [Comment]
+    singleComment(id: ID!): Comment
+    getCommentsWithTracks(id: ID!): TracksWithComments
+  }
+
+  scalar JSON
+
+  type Comment {
+    title: [String]
+    trackId: String
+    body: JSON
+  }
+
+  type TracksWithComments {
+    trackId: String!
+    comments: Comment
   }
 
   type User {
@@ -81,6 +98,7 @@ export const typeDefs = gql`
   }
 
   type Track {
+    id: ID!
     album: Album
     artists: [Artist]
     available_markets: [String]
@@ -90,7 +108,7 @@ export const typeDefs = gql`
     # external_ids: ExternalId
     # external_urls: ExternalUrl
     href: String
-    id: ID!
+
     is_playable: Boolean
     # linked_from: TrackLink
     # restrictions: TrackRestriction
@@ -101,6 +119,7 @@ export const typeDefs = gql`
     type: String
     uri: String
     is_local: Boolean
+    comment: Comment
   }
 
   type Album {
@@ -206,6 +225,7 @@ export const typeDefs = gql`
 
   type Mutation {
     authenticateSpotify(code: String!): AuthResponse
+    createComment(userId: String!, trackId: String!, body: JSON!): Comment
   }
 
   type AuthResponse {

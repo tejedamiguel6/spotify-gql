@@ -10,10 +10,6 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   plugins: [ApolloServerPluginCacheControl({ defaultMaxAge: 5 })],
-  cors: {
-    origin: 'http://localhost:3000',
-    credentials: true,
-  },
 })
 
 const handler = startServerAndCreateNextHandler<NextRequest>(server, {

@@ -45,7 +45,7 @@ const GET_USER_TRACKS = gql`
   }
 `
 
-export default function Tracks({ setSelectedAlbum }) {
+export default function Tracks({ setSelectedAlbum, setTopTrackNote }) {
   // switch to useSuspense later
   const [selectedItem, setSelectedItem] = useState('likedTracks')
 
@@ -58,13 +58,6 @@ export default function Tracks({ setSelectedAlbum }) {
 
   const handleAlbumClick = useCallback(
     (track) => {
-      const getTrackAddedDate = data?.userSavedTracks.items.map((item) => {
-        return {
-          ...item,
-          track,
-        }
-      })
-
       setSelectedAlbum(track)
     },
     [setSelectedAlbum]
@@ -91,7 +84,10 @@ export default function Tracks({ setSelectedAlbum }) {
     <div>
       <div className='pt-3 '>
         <FilterButton handleTopItem={handleTopItem} />
-        <TopItem selectedItem={selectedItem} />
+        <TopItem
+          selectedItem={selectedItem}
+          setTopTrackNote={setTopTrackNote}
+        />
       </div>
 
       <ul className='grid grid-cols-2 gap-3 text-center lg:grid-cols-4 md:grid-cols-3'>
